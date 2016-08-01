@@ -26,5 +26,4 @@ function Cell:new(args)
     return obj
 end
 
--- define public interface
--- TODO
+-- TODO: define public interface
