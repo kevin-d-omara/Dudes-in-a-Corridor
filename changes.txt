@@ -33,3 +33,9 @@ Version 0.0.3 ------------------------------------------------------------------
     - exception: anytime a class is involved, use CapsCase for that portion:
       i.e. tests/Cell (ok!)
            tests/Cell/test_Cell.lua (ok!)
+           
+0.0.5 --------------------------------------------------------------------------
+- added basic support for building grids/maps from a '.map' file
+- future enhancements:
+    - option for more than just '// Dimensions' and '// Open' (i.e. '// Tokens')
+    - ^ requires support from Cell class first via API

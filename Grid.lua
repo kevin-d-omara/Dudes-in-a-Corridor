@@ -40,15 +40,37 @@ function Grid:new(args)
 end
 
 
-function Grid:makeFrom(file)
-    local lines = linesFrom(file)
+function Grid:buildFrom(file)
+    local lines = linesFrom(file)    
+    local x, y = lines[2]:match("(%d+),(%d+)")
+    x = tonumber(x); y = tonumber(y)
+    local grid = Grid:new{lenX = x, lenY = y}
 
-    for i,v in ipairs(lines) do
-      print('line[' .. i .. ']', v)
-    end
+    -- read through lines and insert entities into each square
+    local entity = ''
+    local ii = 1
+    while ii <= #lines do repeat    -- repeat until w/ break == continue
+        if lines[ii]:match("[/*]") then             -- delimited by '// '
+            entity = lines[ii]:match("/*%s*(%g*)")  -- (Open, Token, Unit, etc.)
+            ii = ii + 1; break
+        end
+        
+        local x, y = lines[ii]:match("(%d+),(%d+)")
+        x = tonumber(x); y = tonumber(y)
+        if entity == 'Open' then                -- set square to 'open' values
+            grid[x][y].blocksMove = false
+            grid[x][y].blocksSight = false
+            grid[x][y].blocksAttack = false
+        else                                    -- insert element (rubble, etc.)
+            --ii = ii + 1
+            --local type = lines[ii]
+            --grid[x][y].insert(entity, type)
+        end
+        
+        ii = ii + 1
+    until true end
     
-    --http://stackoverflow.com/questions/19262761/lua-need-to-split-at-comma
+    return grid
 end
 
-Grid:makeFrom('dummyfile.txt')
 -- TODO: define public interface
