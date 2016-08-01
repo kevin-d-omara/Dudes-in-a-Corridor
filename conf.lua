@@ -1,5 +1,5 @@
 function love.conf(t)
-    t.window.title = "Space Hulk Proto" -- The window title (string)
+    t.window.title = "Dudes in a Corridor" -- The window title (string)
     t.window.width = 1024               -- The window width (number)
     t.window.height = 768               -- The window height (number)
     
