@@ -6,7 +6,8 @@ Documentation: http://luaunit.readthedocs.io/en/latest/
 luaunit = require('/tests/luaunit')
 
 -- contents of Unit Test Suite      --> TODO: automate this
-require '/tests/Cell/test_Cell'
+require '/tests/Cell/test_instantiation'
+require '/tests/Grid/test_instantiation'
 
 -- begin tests
 lu = luaunit.LuaUnit.new()
