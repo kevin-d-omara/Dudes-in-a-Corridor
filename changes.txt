@@ -22,3 +22,14 @@ Version 0.0.2 ------------------------------------------------------------------
 Version 0.0.3 ------------------------------------------------------------------
 - discovered several bugs through the use of LuaUnit
     - Cell is now much more robust
+    
+0.0.4 --------------------------------------------------------------------------
+- added Grid.lua class file + unit tests
+- added file_input_output.lua
+- decided on naming convention for filenames:
+    - Class files: CapsCase
+    - (non-class) Source files: lowercase_with_underscores
+    - Packages (directories): lowercasewihtoutunderscores
+    - exception: anytime a class is involved, use CapsCase for that portion:
+      i.e. tests/Cell (ok!)
+           tests/Cell/test_Cell.lua (ok!)
