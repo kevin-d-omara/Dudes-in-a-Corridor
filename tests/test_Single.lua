@@ -6,7 +6,8 @@ Documentation: http://luaunit.readthedocs.io/en/latest/
 luaunit = require('/tests/luaunit')
 
 -- place single Unit Test file here
-require '/tests/Cell/test_Cell'
+require '/tests/Grid/test_Grid'
+--require '/tests/Cell/test_Cell'
 
 -- begin tests
 lu = luaunit.LuaUnit.new()
