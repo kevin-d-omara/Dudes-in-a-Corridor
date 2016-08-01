@@ -1,0 +1,24 @@
+Dudes-in-a-Corridor
+    By Kevin O'Mara
+    
+Version 0.0.1 ------------------------------------------------------------------
+- created barebones project tree
+    - Love/Dudes-in-a-Corridor/
+        - changes.txt
+        - readme.txt
+        - manifesto.txt
+        - main.lua
+        - conf.lua
+        - initialize.lua
+- outlined the projects goals in manifesto.txt
+
+Version 0.0.2 ------------------------------------------------------------------
+- added Cell.lua class file
+    - future reference: https://gist.github.com/tylerneylon/81333721109155b2d244
+      ^ for deep copy
+- set up framework for Test Driven Development through LuaUnit
+    - documentation: http://luaunit.readthedocs.io/en/latest/
+    
+Version 0.0.3 ------------------------------------------------------------------
+- discovered several bugs through the use of LuaUnit
+    - Cell is now much more robust
