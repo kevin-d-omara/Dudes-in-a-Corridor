@@ -4,6 +4,11 @@ A collection of file i/o facilities.
 == From ==
 http://stackoverflow.com/questions/11201262/how-to-read-data-from-a-file-in-lua
 http://lua-users.org/wiki/FileInputOutput
+
+== Pattern Matching ==
+http://lua-users.org/wiki/PatternsTutorial
+http://www.lua.org/manual/5.2/manual.html#6.4.1
+http://lua-users.org/wiki/StringLibraryTutorial
 --]]
 
 -- see if the file exists
