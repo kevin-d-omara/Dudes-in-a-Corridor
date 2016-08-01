@@ -1,0 +1,45 @@
+Dudes in a Corridor Manifesto
+    By Kevin O'Mara
+
+This project is to create a "dudes in a corridor"-style game framework.  Example
+games include Space Hulk, Incursion, Legions of Steel, Sedition Wars, and
+Advanced Space Crusade.
+    
+Electronic inspiration is gained from the brilliant Alien Assault by Teardown:
+http://www.teardown.se/
+
+Ultimately, I will be creating a 2-player, campaign-based, tactical combat and 
+exploration game using my Sector board tiles: http://kevinomara.crevado.com/
+
+-- Primary Goals ---------------------------------------------------------------
+-> Practice good coding standards with an eye to:
+    - low-coupling and high-cohesion
+    - modularity
+    - extensibility
+-> Create a framework which can easily be adapted/extended to make any other
+   "Dudes-in-a-Corridor" type game (i.e. ASC, Incursion, Sedition Wars, etc.)
+
+-- Specific Goals/Features -----------------------------------------------------
+-> Ability to create new:
+    - factions
+    - units
+    - weapons/equipment
+    - tokens (i.e. rubble, pitfalls, turrets, etc.)
+-> 2+ player hotseat and online
+-> Ability to use AI
+-> Create a user-friendly UI
+    - readable icons
+    - readily available game information (i.e. unit stats, etc.)
+-> Mission-specific goals/objectives
+    - i.e. "Flame target room", "Reach point X,Y and extract Z units", etc.
+-> Create a "map builder"
+    - snap-to-grid
+    - drop-in geotiles w/ embedded logic (i.e. wall/open,pathing,etc.) & tokens
+    - drop-in individual tile sprites
+    - user defined logic (i.e. paint wall/open, etc.)
+-> Pre-mission "roster selection"
+    - spend points to purchase squads/models + upgrades
+    - choose where models are placed in-map (within scenario restrictions)
+-> Ability to save games and continue *on any computer*
+    - i.e. play + save game here, go to friend's house and continue game
+    - note: ramifications of this + custom content?
