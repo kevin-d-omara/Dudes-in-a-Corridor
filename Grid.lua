@@ -8,6 +8,7 @@ Hierarchy:
 Fields:
     - 
 --]]
+require 'Cell'
 
 Grid = {}
 function Grid:new(args)
@@ -17,6 +18,13 @@ function Grid:new(args)
     if args == nil then args = {} end
     obj.lenX = (args.lenX == nil) and 10 or args.lenX
     obj.lenY = (args.lenY == nil) and 10 or args.lenY
+    
+    for ii = 1, obj.lenX do
+        obj[ii] = {}
+        for jj = 1, obj.lenY do
+            obj[ii][jj] = Cell:new{}
+        end
+    end
     
     setmetatable(obj, self)
     self.__index = self
