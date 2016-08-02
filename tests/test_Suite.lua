@@ -7,7 +7,6 @@ luaunit = require('/tests/luaunit')
 
 -- contents of Unit Test Suite
 require '/tests/Grid/test_instantiation'
-require '/tests/Grid/test_buildFrom'
 
 -- begin tests
 lu = luaunit.LuaUnit.new()
