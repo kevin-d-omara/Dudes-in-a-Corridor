@@ -51,7 +51,7 @@ function Grid:new(filename)
         local x, y = lines[ii]:match("(%d+),(%d+)")
         x = tonumber(x); y = tonumber(y)
         
-        if entity == 'Open' then -- set square to 'open' values
+        if entity == 'OpenSquares' then -- set square to 'open' values
             grid[x][y].blocksMove = false
             grid[x][y].blocksSight = false
             grid[x][y].blocksAttack = false
@@ -70,8 +70,10 @@ function Grid:new(filename)
     return grid
 end
 
+-- include other functions
+require 'Grid_hasSight'
 
----[[ FOR VISUAL TESTING -------------------------------------------------------
+---[[ FOR VISUAL TESTING (remove for release) ----------------------------------
 function Grid:pprint()
     for y = self.lenY, 1, -1 do
         s1 = ''
@@ -80,15 +82,15 @@ function Grid:pprint()
             for x = 1, self.lenX do
                 if self[x][y].blocksMove == true then
                     if i == 1 then
-                        s1 = s1..'|XXX'
+                        s1 = s1..'|XXXXX'
                     else
-                        s2 = s2..'|X̲X̲X̲'
+                        s2 = s2..'|X̲X̲X̲X̲X̲'
                     end
                 elseif self[x][y].blocksMove == false then
                     if i == 1 then
-                        s1 = s1..'|   '
+                        s1 = s1..'|     '
                     else
-                        s2 = s2..'|___'
+                        s2 = s2..'|_____'
                     end
                 else
                     s1 = s1..'|?*?'
@@ -97,12 +99,12 @@ function Grid:pprint()
         end
         
         print(s1)
+        print(s1)
         print(s2)
     end
 end
 
---g1 = Grid:new('tests/Grid/test_1.map')
---g1:pprint()
+--g1 = Grid:new('tests/Grid/test_1.map'); g1:pprint()
 --]]
 
 -- TODO: define public interface
