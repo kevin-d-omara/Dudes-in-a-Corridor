@@ -7,7 +7,8 @@ Hierarchy:
     Ancestors: none
     Children:  none
 Fields:
-    - 
+    - boolean blocksMove, blocksSight, blocks
+      TODO need duplicate fields for square itself (i.e. wall vs token)
 --]]
 
 Cell = {}
@@ -26,4 +27,11 @@ function Cell:new(args)
     return obj
 end
 
--- TODO: define public interface
+--[[ Define public API
+boolean Cell.blocksMove
+boolean Cell.blocksSight
+boolean Cell.blocksAttack
+It is the Cell's job to keep these updated, so that raycasts/LoS checks are as
+fast as possible.  i.e. when a Token/Unit, etc. is inserted/removed, these
+values should be updated.
+--]]
