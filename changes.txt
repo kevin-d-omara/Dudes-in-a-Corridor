@@ -43,3 +43,6 @@ Version 0.0.3 ------------------------------------------------------------------
 0.0.6 --------------------------------------------------------------------------
 - merged 'Grid:buildFrom(file)' into 'Grid:new(filename)'
 - created 'pretty print' function for Grid (I'm so excited)
+
+0.0.7.0 ------------------------------------------------------------------------
+- started work on square-to-square LoS check; 'Grid:hasSight()'
