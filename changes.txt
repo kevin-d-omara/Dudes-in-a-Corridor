@@ -46,3 +46,9 @@ Version 0.0.3 ------------------------------------------------------------------
 
 0.0.7.0 ------------------------------------------------------------------------
 - started work on square-to-square LoS check; 'Grid:hasSight()'
+
+0.0.7.1
+    - continued work on line of sight algorithm, nearly there
+    - todo: check math.floor vs math.ceil for negative slopes
+            implement corner check within x-loop
+            ^ (!)note: these are interdependent

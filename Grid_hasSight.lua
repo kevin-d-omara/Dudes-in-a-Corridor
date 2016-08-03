@@ -9,6 +9,7 @@ Description:
               AXO                 AOO
 
     TODO: add robust diagrams from pprint()
+    Note: eplison = 1*10^-7; deemed unnecessary
 
 Arguments:
     - number x1, y1; position of first cell
@@ -21,38 +22,64 @@ Example use:
         end
     end
 --]]
-function Grid:hasSight(x1, y1, x2, y2, test)    -- test is for testing only
-    test = test or false
+function Grid:hasSight(x1, y1, x2, y2)
+    x1 = x1 + 0.5; y1 = y1 + 0.5    -- offset to center of square
+    x2 = x2 + 0.5; y2 = y2 + 0.5
+
+    if x2 < x1 then -- make pt1 be on left
+        x1, y1, x2, y2 = x2, y2, x1, y1
+    end
+    -- check negative slope
+    
     local dx = x2 - x1
     local dy = y2 - y1
-    -- check for divide by zero
-    local m  = dy / dx
-    local b  = y1 - m * x1
-    -- check for 'up -> right' orientation, rotate if necessary
+    local m = dy/dx
+    local b = y1 - m*x1
+    local theta = math.deg(math.atan(dy,dx))
+
+    local x = x1 + 0.5
+    local y = m*x + b
+    local numStepsX = (math.abs(theta) < 45.0) and (dx - 1) or (dx + 1)
+    if math.abs(m) == 1/0 then numStepsX = 0 end
+    local topCornerBlocked, bottomCornerBlocked = false, false
+    local eps = 0.0000001
     
-    local x = x1 + 1
-    local y = m * x + b + 0.5
-    for i = 1, dx do
-        if self[x][math.floor(y)].blocksSight then return false end
+    for i = 1, numStepsX do
+        if math.abs(y - math.floor(y + eps)) < eps then
+            -- corner
+        else
+            if self[math.floor(x)][math.floor(y)].blocksSight then
+                return false
+            end
+        end
         x = x + 1
         y = y + m
     end
+    if topCornerBlocked and bottomCornerBlocked then return false end
 
-    local y = y1 + 1
-    --local x = (y + 0.5 - b) / m
-    local x = (y + 0.5 - b) / m - 1 -- works, don't know why
-    local stepX = 1 / m
+    y = y1 + ((m > 0) and 0.5 or -1.5)
+    local stepY = (m > 0) and 1 or -1
+    local stepX
+    if dx == 0 then
+        x = x1
+        stepX = 0
+    else
+        x = (y - b)/m
+        stepX = 1/m
+    end
+    local numStepsY = (math.abs(theta) < 45.0) and (dy) or (dy - 1)
     
-    if test then print('y: '..y) end
-    if test then print('x: '..x) end
-    
-    for j = 1, dy do
-        if test then print('('..math.floor(x)..','..y..')') end
-        if self[math.floor(x)][y].blocksSight then return false end
-        y = y + 1
+    for j = 1, math.abs(numStepsY) do
+        if math.abs(x - math.floor(x + eps)) < eps then
+            -- nothing, corner already handled in x-loop
+        else
+            if self[math.floor(x)][math.floor(y)].blocksSight then
+                return false
+            end
+        end
+        y = y + stepY
         x = x + stepX
     end
-    if test then print(self[13][5].blocksSight) end
 
     return true
 end
@@ -64,27 +91,49 @@ end
 
 
 
+
+
+
+
+
+
+
 --[[
-    -- check for 'up -> right' orientation, rotate if necessary
-    print('--------')
-    print('pt1('..x1..','..y1..')')
-    print('pt2('..x2..','..y2..')')
-    print('dx: '..dx..'; dy: '..dy)
-    print('m : '..m)  
+    -- check negative slope
     
-    local x = x1 + 1
-    local y = m * x + b +0.5
-    print('xi: '..x)
-    print('yi: '..y)
-    print('--------')
-    for i = 1, dx do
-        print('x :'..x)
-        print('y :'..y)
-        print('y_:'..math.floor(y))
-        if self[x][math.floor(y)].blocksSight then return false end
-        x = x + 1
-        y = y + m
-    end
+    THETA
+
+    if test then print('--------') end
+    if test then print('pt1('..x1..','..y1..')') end
+    if test then print('pt2('..x2..','..y2..')') end
+    if test then print('dx: '..dx..'; dy: '..dy) end
+    if test then print('m : '..m) end
+    if test then print('b : '..b) end
+    if test then print('theta : '..theta) end
+
+    PRE - LOOP X
+    
+    if test then print('X--------------------------') end
+    if test then print('x: '..x) end
+    if test then print('y: '..y) end
+    if test then print('numStepsX: '..numStepsX) end
+    
+    LOOP X
+    
+    if test then print('('..math.floor(x)..','..math.floor(y)..')') end
+    
+    PRE - LOOP Y
+    
+    if test then print('Y--------------------------') end
+    if test then print('x: '..x) end
+    if test then print('y: '..y) end
+    if test then print('numStepsY: '..numStepsY) end
+    if test then print('stepX: '..stepX) end
+    if test then print('stepY: '..stepY) end
+    
+    LOOP Y
+    
+    if test then print('('..math.floor(x)..','..math.floor(y)..')') end
 --]]
 
 
@@ -92,18 +141,6 @@ end
 
 
 
-
---[[ For optimization testing:
-    local sightBlocked = false
-    local x = x1 + 1
-    local y = m * x
-    for i = 1, dx do
-        sightBlocked = self[x][y].blocksSight or sightBlocked
-        x = x + 1
-        y = y + m
-    end
-    if sightBlocked then return false end
---]]
 
 
 
