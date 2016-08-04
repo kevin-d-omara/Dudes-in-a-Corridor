@@ -75,6 +75,7 @@ require 'Grid_hasSight'
 
 ---[[ FOR VISUAL TESTING (remove for release) ----------------------------------
 function Grid:pprint()
+    for i = 1, self.lenX do io.write('______') end; print('_')
     for y = self.lenY, 1, -1 do
         s1 = ''
         s2 = ''
@@ -98,9 +99,9 @@ function Grid:pprint()
             end
         end
         
-        print(s1)
-        print(s1)
-        print(s2)
+        io.write(s1); print('|')
+        io.write(s1); print('|')
+        io.write(s2); print('|')
     end
 end
 
