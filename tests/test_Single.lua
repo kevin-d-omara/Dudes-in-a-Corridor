@@ -12,5 +12,5 @@ require '/tests/Grid/test_hasSight'
 
 -- begin tests
 lu = luaunit.LuaUnit.new()
-lu:setOutputType("tap")
+lu:setOutputType("text")    -- "tap"; other option
 os.exit( lu:runSuite() )
