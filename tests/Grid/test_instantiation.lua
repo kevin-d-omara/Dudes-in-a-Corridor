@@ -3,7 +3,7 @@ require 'Grid'
 TestGrid_Instantiation = {}
     function TestGrid_Instantiation:test_lengthWidth()
         local grid = Grid:new('tests/Grid/test_1.map')
-        luaunit.assertEquals(grid.lenX, 27)
+        luaunit.assertEquals(grid.lenX, 34)
         luaunit.assertEquals(grid.lenY, 5)
     end
     
@@ -22,7 +22,7 @@ TestGrid_Instantiation = {}
     
     function TestGrid_Instantiation:test_1_map()
         local grid = Grid:new('tests/Grid/test_1.map')
-        luaunit.assertEquals(grid.lenX, 27)
+        luaunit.assertEquals(grid.lenX, 34)
         luaunit.assertEquals(grid.lenY, 5)
         
         -- check default 'wall' squares
