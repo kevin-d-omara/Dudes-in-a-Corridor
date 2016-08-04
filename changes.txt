@@ -1,54 +1,59 @@
 Dudes-in-a-Corridor
     By Kevin O'Mara
-    
+
 Version 0.0.1 ------------------------------------------------------------------
-- created barebones project tree
-    - Love/Dudes-in-a-Corridor/
-        - changes.txt
-        - readme.txt
-        - manifesto.txt
-        - main.lua
-        - conf.lua
-        - initialize.lua
-- outlined the projects goals in manifesto.txt
+    - created barebones project tree
+        - Love/Dudes-in-a-Corridor/
+            - changes.txt
+            - readme.txt
+            - manifesto.txt
+            - main.lua
+            - conf.lua
+            - initialize.lua
+    - outlined the projects goals in manifesto.txt
 
 Version 0.0.2 ------------------------------------------------------------------
-- added Cell.lua class file
-    - future reference: https://gist.github.com/tylerneylon/81333721109155b2d244
+    - added Cell.lua class file
+    - future reference:https://gist.github.com/tylerneylon/81333721109155b2d244
       ^ for deep copy
-- set up framework for Test Driven Development through LuaUnit
-    - documentation: http://luaunit.readthedocs.io/en/latest/
-    
+    - set up framework for Test Driven Development through LuaUnit
+        - documentation: http://luaunit.readthedocs.io/en/latest/
+
 Version 0.0.3 ------------------------------------------------------------------
-- discovered several bugs through the use of LuaUnit
-    - Cell is now much more robust
-    
+    - discovered several bugs through the use of LuaUnit
+        - Cell is now much more robust
+
 0.0.4 --------------------------------------------------------------------------
-- added Grid.lua class file + unit tests
-- added file_input_output.lua
-- decided on naming convention for filenames:
-    - Class files: CapsCase
-    - (non-class) Source files: lowercase_with_underscores
-    - Packages (directories): lowercasewihtoutunderscores
-    - exception: anytime a class is involved, use CapsCase for that portion:
-      i.e. tests/Cell (ok!)
-           tests/Cell/test_Cell.lua (ok!)
-           
+    - added Grid.lua class file + unit tests
+    - added file_input_output.lua
+    - decided on naming convention for filenames:
+        - Class files: CapsCase
+        - (non-class) Source files: lowercase_with_underscores
+        - Packages (directories): lowercasewihtoutunderscores
+        - exception: anytime a class is involved, use CapsCase for that portion:
+          i.e. tests/Cell (ok!)
+               tests/Cell/test_Cell.lua (ok!)
+
 0.0.5 --------------------------------------------------------------------------
-- added basic support for building grids/maps from a '.map' file
-- future enhancements:
-    - option for more than just '// Dimensions' and '// Open' (i.e. '// Tokens')
-    - ^ requires support from Cell class first via API
-    
+    - added basic support for building grids/maps from a '.map' file
+    - future enhancements:
+        - option for new labels (i.e. '// Tokens')
+        - ^ requires support from Cell class first via API
+
 0.0.6 --------------------------------------------------------------------------
-- merged 'Grid:buildFrom(file)' into 'Grid:new(filename)'
-- created 'pretty print' function for Grid (I'm so excited)
-
+    - merged 'Grid:buildFrom(file)' into 'Grid:new(filename)'
+    - created 'pretty print' function for Grid (I'm so excited)
 0.0.7.0 ------------------------------------------------------------------------
-- started work on square-to-square LoS check; 'Grid:hasSight()'
+    - started work on square-to-square LoS check; 'Grid:hasSight()'
 
-0.0.7.1
+0.0.7.1 ------------------------------------------------------------------------
     - continued work on line of sight algorithm, nearly there
     - todo: check math.floor vs math.ceil for negative slopes
             implement corner check within x-loop
             ^ (!)note: these are interdependent
+0.0.8.0 ------------------------------------------------------------------------
+    - FINISHED LOS ALGORITHM.  My mind was pretty close to melting...
+        - extensive unit testing; I'm quite satisfied with the results
+        - (!) I have NOT tested every single circumstance, however I've seen the
+           results so far and deemed further unit testing unnecessary
+        - future testing will come through actual playtests
