@@ -6,6 +6,8 @@ Description:
 Hierarchy:
     Ancestors: none
     Children:  none
+Arguments:
+    - table {} :: args; optional arguments (blocksMove, etc.)
 Fields:
     - boolean  :: blocksMove, blocksSight, blocksAttack
     - table {} :: intrinsic
@@ -17,19 +19,19 @@ Public API
 
 Cell = {}
 function Cell:new(args)
-    local obj = {}
+    local cell = {}
     
     -- default Cell is a 'wall' with no contained elements
     if args == nil then args = {} end
-    obj.blocksMove = (args.blocksMove == nil) and true or args.blocksMove
-    obj.blocksSight = (args.blocksSight == nil) and true or args.blocksSight
-    obj.blocksAttack = (args.blocksAttack == nil) and true or args.blocksAttack
+    cell.blocksMove = (args.blocksMove == nil) and true or args.blocksMove
+    cell.blocksSight = (args.blocksSight == nil) and true or args.blocksSight
+    cell.blocksAttack = (args.blocksAttack == nil) and true or args.blocksAttack
     
-    setmetatable(obj, self)
+    setmetatable(cell, self)
     self.__index = self
-    --table.insert(Cell.allCells, obj)
-    obj:updateBooleans()
-    return obj
+    --table.insert(Cell.allCells, cell)
+    cell:updateBooleans()
+    return cell
 end
 
 --[[
@@ -42,4 +44,5 @@ function Cell:updateBooleans()
     -- If any component blocks, then the public value is 'true'
     
     -- TODO: implement + test
+    -- Update Edges when self updated (!)
 end
