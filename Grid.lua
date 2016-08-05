@@ -9,10 +9,10 @@ Hierarchy:
     Ancestors: none
     Children:  none
 Arguments:
-    - string filename; path to file (i.e. 'maps/test1.map')
+    - string  :: filename; path to file (i.e. 'maps/test1.map')
 Fields:
-    - integer lenX; horizontal width of grid
-    - integer lenY; vertical width of grid
+    - integer :: lenX; horizontal width of grid
+    - integer :: lenY; vertical width of grid
 Functions:
     - 
 --]]
