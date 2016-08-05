@@ -23,31 +23,31 @@ Public API
 
 Edge = {}
 function Edge:new(cell_1, cell_2, args)
-    local obj = {}
+    local edge = {}
     
     -- default Edge is 'open' with no contained elements
     if args == nil then args = {} end
-    obj.intrinsic = {}
-    obj.intrinsic.blocksMove = ((args.blocksMove == nil) and {false} or
+    edge.intrinsic = {}
+    edge.intrinsic.blocksMove = ((args.blocksMove == nil) and {false} or
         {args.blocksMove})[1]
-    obj.intrinsic.blocksSight = ((args.blocksSight == nil) and {false} or
+    edge.intrinsic.blocksSight = ((args.blocksSight == nil) and {false} or
         {args.blocksSight})[1]
-    obj.intrinsic.blocksAttack = ((args.blocksAttack == nil) and {false} or
+    edge.intrinsic.blocksAttack = ((args.blocksAttack == nil) and {false} or
         {args.blocksAttack})[1]
 
-    obj.cell_1 = cell_1
-    obj.cell_2 = cell_2
+    edge.cell_1 = cell_1
+    edge.cell_2 = cell_2
     
     -- public values defined by 'logical or' of all components
-    obj.blocksMove = false
-    obj.blocksSight = false
-    obj.blocksAttack = false
+    edge.blocksMove = false
+    edge.blocksSight = false
+    edge.blocksAttack = false
     
-    setmetatable(obj, self)
+    setmetatable(edge, self)
     self.__index = self
-    --table.insert(Edge.allEdges, obj)
-    obj:updateBooleans()
-    return obj
+    --table.insert(Edge.allEdges, edge)
+    edge:updateBooleans()
+    return edge
 end
 
 --[[
