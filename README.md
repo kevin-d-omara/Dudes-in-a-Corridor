@@ -7,3 +7,7 @@ etc.).
 
 For the entire project goals and inspiration see
 Dudes-in-a-Corridor/manifesto.txt
+
+This project lays the foundation to bring Sector 8 to a computer near you! http://kevinomara.crevado.com/
+
+![Image](<http://i.imgur.com/ZjGyhUB.png>)
