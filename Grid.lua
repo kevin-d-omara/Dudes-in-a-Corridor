@@ -1,8 +1,8 @@
 --[[
 Class - Grid
 Description:
-    A Grid is a rectangular collection of cells (i.e. 2d array).  Its cartesian
-    coordinates (x,y) have their origin at the bottom left.
+    A Grid is a rectangular collection of Cells and Edges (i.e. 2d array).
+    Its cartesian coordinates (x,y) have their origin at the bottom left.
     i.e.  (1,2) (2,2)       ->(1,1) (1,2)
         ->(1,1) (2,1)   NOT   (2,1) (2,2)
 Hierarchy:
@@ -11,15 +11,20 @@ Hierarchy:
 Arguments:
     - string  :: filename; path to file (i.e. 'maps/test1.map')
 Fields:
+    - integer :: BUFFER; Number of 'wall' Cells bordering filename-defined Grid
     - integer :: lenX; horizontal width of grid
     - integer :: lenY; vertical width of grid
 Functions:
     - 
+Public API
+    -
 --]]
 require 'Cell'
+require 'Edge'
 require 'file_intput_output'    -- TODO: make local? test locality
 
 Grid = {}
+Grid.BUFFER = 2 -- Number of 'wall' Cells bordering filename-defined Grid
 function Grid:new(filename)
     local grid = {}
     
@@ -29,10 +34,10 @@ function Grid:new(filename)
     grid.lenX = tonumber(grid.lenX)
     grid.lenY = tonumber(grid.lenY)
     
-    -- create 2d array with default Cells
-    for ii = 1, grid.lenX do
+    -- create 2d array with default 'wall' Cells
+    for ii = (1 - self.BUFFER), (grid.lenX + self.BUFFER) do
         grid[ii] = {}
-        for jj = 1, grid.lenY do
+        for jj = (1 - self.BUFFER), (grid.lenY + self.BUFFER) do
             grid[ii][jj] = Cell:new{}
         end
     end
@@ -64,9 +69,27 @@ function Grid:new(filename)
         ii = ii + 1
     until true end
     
+    -- create 2d array with default 'open' Edges along the X-axis ( | | | )
+    grid.edgeX = {}
+    for xx = (2 - self.BUFFER), (grid.lenX + self.BUFFER) do
+        grid.edgeX[xx] = {}
+        for yy = (2 - self.BUFFER), (grid.lenY + self.BUFFER - 1) do
+            grid.edgeX[xx][yy] = Edge:new(grid[xx-1][yy], grid[xx][yy])
+        end
+    end
+
+    -- create 2d array with default 'open' Edges along the Y-axis ( __ __ __ )
+    grid.edgeY = {}
+    for xx = (2 - self.BUFFER), (grid.lenX + self.BUFFER - 1) do
+        grid.edgeY[xx] = {}
+        for yy = (2 - self.BUFFER), (grid.lenY + self.BUFFER) do
+            grid.edgeY[xx][yy] = Edge:new(grid[xx][yy], grid[xx][yy-1])
+        end
+    end
+
     setmetatable(grid, self)
     self.__index = self
-    --table.insert(Grid.allGrids, obj)
+    --table.insert(Grid.allGrids, grid)
     return grid
 end
 
@@ -74,13 +97,19 @@ end
 require 'Grid_hasSight'
 
 ---[[ FOR VISUAL TESTING (remove for release) ----------------------------------
-function Grid:pprint()
+function Grid:pprint(withBuffer)
+    local buffer = withBuffer and self.BUFFER or 0
+    local yStart = self.lenY + buffer
+    local yEnd = 1 - buffer
+    local xStart = 1 - buffer
+    local xEnd = self.lenX + buffer
+    
     for i = 1, self.lenX do io.write('______') end; print('_')
-    for y = self.lenY, 1, -1 do
+    for y = yStart, yEnd, -1 do
         s1 = ''
         s2 = ''
         for i = 1, 2 do
-            for x = 1, self.lenX do
+            for x = xStart, xEnd do
                 if self[x][y].blocksMove == true then
                     if i == 1 then
                         s1 = s1..'|XXXXX'
@@ -89,7 +118,7 @@ function Grid:pprint()
                     end
                 elseif self[x][y].blocksMove == false then
                     if i == 1 then
-                        s1 = s1..'|     '
+                        s1 = s1..'|     '   -- ‖
                     else
                         s2 = s2..'|_____'
                     end
@@ -105,7 +134,5 @@ function Grid:pprint()
     end
 end
 
---g1 = Grid:new('tests/Grid/test_1.map'); g1:pprint()
+g1 = Grid:new('tests/Grid/test_1.map'); g1:pprint(true)
 --]]
-
--- TODO: define public interface

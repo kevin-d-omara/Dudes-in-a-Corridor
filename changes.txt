@@ -60,3 +60,7 @@ Version 0.0.3 ------------------------------------------------------------------
 0.0.8.1 ------------------------------------------------------------------------
     - new class: Edge
         - minimum functionality; tested
+0.0.8.2 ------------------------------------------------------------------------
+    - ++ Grid:new()
+    - includes Edge objects for X and Y axis
+        - still needs testing; currently working on ++ pretty print
