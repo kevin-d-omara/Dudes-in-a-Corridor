@@ -42,7 +42,8 @@ end
 function Cell:updateBooleans()
     -- Each public value is the 'logical or' of all its component values
     -- If any component blocks, then the public value is 'true'
-    
+        -- ^ each component must implement 'sightBlocking', 'moveBlocking', etc.
+        -- composition > inheritance, i.e. 'quackable', 'flyable', etc.
     -- TODO: implement + test
     -- Update Edges when self updated (!)
 end
