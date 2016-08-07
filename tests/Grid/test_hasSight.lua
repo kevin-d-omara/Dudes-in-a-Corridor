@@ -181,6 +181,24 @@ TestGrid_hasSight_bothCorners = {}
 
 --==============================================================================
 
+TestGrid_hasSight_diagonalThroughBlock = {}
+
+    function TestGrid_hasSight_diagonalThroughBlock:setUp()
+        g1 = Grid:new('tests/Grid/test_1.map')
+    end
+    
+    function TestGrid_hasSight_diagonalThroughBlock:tearDown()
+        g1 = nil
+    end
+    
+    function TestGrid_hasSight_diagonalThroughBlock:test_throughCorner()
+        luaunit.assertFalse(g1:hasSight(28,2 , 30,4))   -- '+' slope
+        luaunit.assertFalse(g1:hasSight(28,2 , 31,5))   -- '+' slope
+        luaunit.assertFalse(g1:hasSight(28,4 , 30,2))   -- '-' slope
+    end
+
+--==============================================================================
+
 TestGrid_hasSight_randomAttempts = {}
 
     function TestGrid_hasSight_randomAttempts:setUp()
@@ -224,12 +242,16 @@ TestGrid_hasSight_randomAttempts = {}
     if test then print('shiftBot: '..shiftBot) end
 
     -- X LOOP
-    if test then print('('..math.floor(x)..','..math.floor(y)..')') end
+    if test then print('('..math.floor(x)..','..math.floor(y+eps)..')') end
 
     -- Check Corners
     if test then print('corner') end
-    if test then print('-> ('..math.floor(x)+shiftTop..','..math.floor(y+eps)..')') end
-    if test then print('-> ('..math.floor(x)+shiftBot..','..(math.floor(y+eps)-1)..')') end
+    if test then print('top:') end
+    if test then print('-> edgeX('..math.floor(x)..','..math.floor(y+eps)..')') end
+    if test then print('-> edgeY('..(math.floor(x)+shiftTop)..','..math.floor(y+eps)..')') end
+    if test then print('bot:') end
+    if test then print('-> edgeX('..math.floor(x)..','..(math.floor(y+eps)-1)..')') end
+    if test then print('-> edgeY('..(math.floor(x)+shiftBot)..','..math.floor(y+eps)..')') end
     -- actual check
     if test then print('-> top: '..tostring(topCornerBlocked)) end
     if test then print('-> bot: '..tostring(bottomCornerBlocked)) end
@@ -239,11 +261,10 @@ TestGrid_hasSight_randomAttempts = {}
     if test then print('x: '..x) end
     if test then print('y: '..y) end
     if test then print('numStepsY: '..numStepsY) end
-    if test then print('shiftY: '..shiftY) end
     if test then print('stepX: '..stepX) end
     if test then print('stepY: '..stepY) end
     
     -- Y LOOP
-    if test then print('('..math.floor(x)..','..(math.floor(y)+shiftY)..')') end
+    if test then print('('..math.floor(x+eps)..','..(math.floor(y))..')') end
 
 --]]

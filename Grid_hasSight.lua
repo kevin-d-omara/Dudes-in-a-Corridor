@@ -46,14 +46,17 @@ function Grid:hasSight(x1, y1, x2, y2)
     -- check vertical edge collisions; (i.e. ray ⊥ y-axis '-> | ->' )
     for i = 1, numStepsX do
         if math.abs(y - math.floor(y + eps)) >= eps then
-            if self[math.floor(x)][math.floor(y)].blocksSight then
+            if self.edgeX[math.floor(x)][math.floor(y)].blocksSight then
                 return false
             end
         else -- check corners
-            topCornerBlocked = topCornerBlocked or
-                self[math.floor(x)+shiftTop][math.floor(y+eps)].blocksSight
-            bottomCornerBlocked = bottomCornerBlocked or
-                self[math.floor(x)+shiftBot][math.floor(y+eps)-1].blocksSight
+            topCornerBlocked = topCornerBlocked
+            or self.edgeX[math.floor(x)][math.floor(y+eps)].blocksSight
+            or self.edgeY[math.floor(x)+shiftTop][math.floor(y+eps)].blocksSight
+
+            bottomCornerBlocked = bottomCornerBlocked
+            or self.edgeX[math.floor(x)][math.floor(y+eps)-1].blocksSight
+            or self.edgeY[math.floor(x)+shiftBot][math.floor(y+eps)].blocksSight
         end
         x = x + 1
         y = y + m
@@ -62,7 +65,6 @@ function Grid:hasSight(x1, y1, x2, y2)
 
 -- Y LOOP (PRE)
     y = y1 + ((m > 0) and 0.5 or -0.5)
-    local shiftY = (m > 0) and 0 or -1
     local stepY = (m > 0) and 1 or -1
     local stepX
     if dx == 0 then
@@ -78,9 +80,11 @@ function Grid:hasSight(x1, y1, x2, y2)
 -- Y LOOP
     -- check horizontal edge collisions; (i.e. ray ⊥ x-axis '--')
     for j = 1, numStepsY do
-        if self[math.floor(x+eps)][math.floor(y)+shiftY].blocksSight then
-            return false
-        end
+        if math.abs(x - math.floor(x + eps)) >= eps then
+            if self.edgeY[math.floor(x+eps)][math.floor(y)].blocksSight then
+                return false
+            end
+        end -- skip corners; already checked in X Loop
         y = y + stepY
         x = x + stepX
     end

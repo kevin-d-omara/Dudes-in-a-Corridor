@@ -64,3 +64,8 @@ Version 0.0.3 ------------------------------------------------------------------
     - ++ Grid:new()
     - includes Edge objects for X and Y axis
         - still needs testing; currently working on ++ pretty print
+0.0.9.0 ------------------------------------------------------------------------
+    - ++ Grid:hasSight()
+        - fully updated to check Edges instead of Cells
+        - todo: check actual free-standing wall Edges
+          ^ currently all Edges are part of a Cell wall
