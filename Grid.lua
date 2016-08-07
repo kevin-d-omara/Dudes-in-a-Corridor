@@ -24,7 +24,8 @@ require 'Edge'
 require 'file_intput_output'    -- TODO: make local? test locality
 
 Grid = {}
-Grid.BUFFER = 2 -- Number of 'wall' Cells bordering filename-defined Grid
+Grid.BUFFER = 2 -- # of 'wall' Cells bordering Grid;
+                -- to prevent nil dereferences by catching explosions etc.
 function Grid:new(filename)
     local grid = {}
     
@@ -41,34 +42,7 @@ function Grid:new(filename)
             grid[ii][jj] = Cell:new{}
         end
     end
-    
-    -- read through file and insert entities into each square
-    local entity = ''
-    local ii = 3
-    while ii <= #lines do repeat    -- repeat until w/ break == continue
-        -- check for header/entity
-        if lines[ii]:match("[/*]") then             -- delimited by '// '
-            entity = lines[ii]:match("/*%s*(%g*)")  -- (Open, Token, Unit, etc.)
-            ii = ii + 1; break
-        end
-        
-        -- get coordinates (x,y)
-        local x, y = lines[ii]:match("(%d+),(%d+)")
-        x = tonumber(x); y = tonumber(y)
-        
-        if entity == 'OpenSquares' then -- set square to 'open' values
-            grid[x][y].blocksMove = false
-            grid[x][y].blocksSight = false
-            grid[x][y].blocksAttack = false
-        else -- insert element (rubble, etc.)
-            --ii = ii + 1
-            --local type = lines[ii]
-            --grid[x][y].insert(entity, type)
-        end
-        
-        ii = ii + 1
-    until true end
-    
+
     -- create 2d array with default 'open' Edges along the X-axis ( | | | )
     grid.edgeX = {}
     for xx = (2 - self.BUFFER), (grid.lenX + self.BUFFER) do
@@ -87,6 +61,54 @@ function Grid:new(filename)
         end
     end
 
+    -- read through file and insert entities into each square
+    local entity = ''
+    local ii = 3
+    while ii <= #lines do
+        -- check for header/entity
+        if lines[ii]:match("[/*]") then             -- delimited by '// '
+            entity = lines[ii]:match("/*%s*(%g*)")  -- (Open, Token, Unit, etc.)
+            ii = ii + 1
+        end
+        
+        -- get coordinates (x,y)
+        local x, y = lines[ii]:match("(%d+),(%d+)")
+        x = tonumber(x); y = tonumber(y)
+        
+        if entity == 'OpenSquares' then -- set square to 'open' values
+            grid[x][y].blocksMove   = false
+            grid[x][y].blocksSight  = false
+            grid[x][y].blocksAttack = false
+        elseif entity == 'EdgeX' then   -- set edge to 'wall' values
+            grid.edgeX[x][y].intrinsic.blocksMove   = true
+            grid.edgeX[x][y].intrinsic.blocksSight  = true
+            grid.edgeX[x][y].intrinsic.blocksAttack = true
+        elseif entity == 'EdgeY' then
+            grid.edgeY[x][y].intrinsic.blocksMove   = true
+            grid.edgeY[x][y].intrinsic.blocksSight  = true
+            grid.edgeY[x][y].intrinsic.blocksAttack = true
+        else -- insert element (rubble, etc.)
+            --ii = ii + 1
+            --local type = lines[ii]
+            --grid[x][y].insert(entity, type)
+        end
+        
+        ii = ii + 1
+    end
+
+    ---[[ updated Edge booleans to account for added entities
+    for xx = (2 - self.BUFFER), (grid.lenX + self.BUFFER) do
+        for yy = (2 - self.BUFFER), (grid.lenY + self.BUFFER - 1) do
+            grid.edgeX[xx][yy]:updateBooleans()
+        end
+    end
+    for xx = (2 - self.BUFFER), (grid.lenX + self.BUFFER - 1) do
+        for yy = (2 - self.BUFFER), (grid.lenY + self.BUFFER) do
+            grid.edgeY[xx][yy]:updateBooleans()
+        end
+    end
+    --]]
+    
     setmetatable(grid, self)
     self.__index = self
     --table.insert(Grid.allGrids, grid)
@@ -134,5 +156,5 @@ function Grid:pprint(withBuffer)
     end
 end
 
-g1 = Grid:new('tests/Grid/test_1.map'); g1:pprint(true)
+--g1 = Grid:new('tests/Grid/test_1.map'); g1:pprint(false)
 --]]
