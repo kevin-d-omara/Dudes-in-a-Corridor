@@ -61,6 +61,34 @@ function Grid:hasSight(x1, y1, x2, y2)
         x = x + 1
         y = y + m
     end
+    
+    -- X LOOP (POST) -> final edge check
+    -- check final edge the target is behind
+    -- only look for edge dwelling sight blockers (i.e. edge-doors, edge-walls)
+    local shiftY = (m < 0) and 1 or 0
+    if math.abs(45 - math.abs(theta)) <= eps then -- corner check 0.000001
+        if m < 0 then   -- [ERROR] check all 4 edges, not just 2; intrinsic on closest 2 only
+            topCornerBlocked = topCornerBlocked
+                or self.edgeY[math.floor(x2)][math.floor(y2+shiftY)].blocksSight
+            bottomCornerBlocked = bottomCornerBlocked
+                or self.edgeX[math.floor(x2)][math.floor(y2)].blocksSight
+        else
+            topCornerBlocked = topCornerBlocked
+                or self.edgeX[math.floor(x2)][math.floor(y2)].blocksSight
+            bottomCornerBlocked = bottomCornerBlocked
+                or self.edgeY[math.floor(x2)][math.floor(y2)].blocksSight
+        end
+        --self.edgeX[math.floor(x2)][math.floor(y2)].blocksSight
+        --self.edgeY[math.floor(x2)][math.floor(y2+shiftY)].blocksSight
+    elseif math.abs(theta) < 45.0 then
+        if self.edgeX[math.floor(x2)][math.floor(y2)].blocksSight then
+            return false
+        end
+    else -- abs(theta) > 45.0
+        if self.edgeY[math.floor(x2)][math.floor(y2+shiftY)].blocksSight then
+            return false
+        end
+    end    
     if topCornerBlocked and bottomCornerBlocked then return false end
 
 -- Y LOOP (PRE)

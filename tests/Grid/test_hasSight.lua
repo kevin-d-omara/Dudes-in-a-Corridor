@@ -2,7 +2,8 @@ require 'Grid'
 require 'Grid_hasSight'
 
 -- print test_1.map to STDOUT to aid with checking results
-local g1 = Grid:new('tests/Grid/test_1.map'); g1:pprint()   -- print test_1.map
+local g1 = Grid:new('tests/Grid/test_1.map')
+g1:pprint()   -- print test_1.map
 
 TestGrid_hasSight_dxIsZero = {}
 
@@ -26,7 +27,7 @@ TestGrid_hasSight_dxIsZero = {}
     
     function TestGrid_hasSight_dxIsZero:test_endClosed_1wallDeep()
         local grid = Grid:new('tests/Grid/test_1.map')
-        luaunit.assertTrue(grid:hasSight(1,3 , 1,4))    -- '+' 'slope'
+        luaunit.assertTrue(grid:hasSight(1,3 , 1,4))    -- '+' 'slope' [ERROR] -> wall blocking itself equivalent to target/source unit blocking own edges.  However, it is desired behavior for a WALL to block itself, but not for units/crates/etc.
         luaunit.assertTrue(grid:hasSight(1,3 , 1,2))    -- '-' 'slope'
     end
     
@@ -54,22 +55,13 @@ TestGrid_hasSight_dyIsZero = {}
     
     function TestGrid_hasSight_dyIsZero:test_endClosed_1wallDeep()
         local grid = Grid:new('tests/Grid/test_1.map')
-        luaunit.assertTrue(grid:hasSight(21,2 , 22,2))  -- forward
+        luaunit.assertTrue(grid:hasSight(21,2 , 22,2))  -- forward [ERROR] -> wall blocking itself equivalent to target/source unit blocking own edges.  However, it is desired behavior for a WALL to block itself, but not for units/crates/etc.
         luaunit.assertTrue(grid:hasSight(5,2 , 4,2))    -- aft
     end
 
 --==============================================================================
 
 TestGrid_hasSight_topCornerOnly = {}
-
-    function TestGrid_hasSight_topCornerOnly:setUp()
-        g1 = Grid:new('tests/Grid/test_1.map')
-    end
-    
-    function TestGrid_hasSight_topCornerOnly:tearDown()
-        g1 = nil
-    end
-
     function TestGrid_hasSight_topCornerOnly:test_1_corner()
         -- 45 degrees
         luaunit.assertTrue(g1:hasSight(18,3 , 19,4))    -- '+' slope
@@ -105,15 +97,6 @@ TestGrid_hasSight_topCornerOnly = {}
 --==============================================================================
 
 TestGrid_hasSight_bottomCornerOnly = {}
-
-    function TestGrid_hasSight_bottomCornerOnly:setUp()
-        g1 = Grid:new('tests/Grid/test_1.map')
-    end
-    
-    function TestGrid_hasSight_bottomCornerOnly:tearDown()
-        g1 = nil
-    end
-
     function TestGrid_hasSight_bottomCornerOnly:test_1_corner()
         -- 45 degrees
         luaunit.assertTrue(g1:hasSight(21,2 , 22,3))    -- '+' slope
@@ -149,15 +132,6 @@ TestGrid_hasSight_bottomCornerOnly = {}
 --==============================================================================
 
 TestGrid_hasSight_bothCorners = {}
-
-    function TestGrid_hasSight_bothCorners:setUp()
-        g1 = Grid:new('tests/Grid/test_1.map')
-    end
-    
-    function TestGrid_hasSight_bothCorners:tearDown()
-        g1 = nil
-    end
-
     function TestGrid_hasSight_bothCorners:test_bothCorners()
         -- 45 degrees
         luaunit.assertFalse(g1:hasSight(17,2 , 19,4))   -- '+' slope
@@ -182,15 +156,6 @@ TestGrid_hasSight_bothCorners = {}
 --==============================================================================
 
 TestGrid_hasSight_diagonalThroughBlock = {}
-
-    function TestGrid_hasSight_diagonalThroughBlock:setUp()
-        g1 = Grid:new('tests/Grid/test_1.map')
-    end
-    
-    function TestGrid_hasSight_diagonalThroughBlock:tearDown()
-        g1 = nil
-    end
-    
     function TestGrid_hasSight_diagonalThroughBlock:test_throughCorner()
         luaunit.assertFalse(g1:hasSight(28,2 , 30,4))   -- '+' slope
         luaunit.assertFalse(g1:hasSight(28,2 , 31,5))   -- '+' slope
@@ -199,16 +164,20 @@ TestGrid_hasSight_diagonalThroughBlock = {}
 
 --==============================================================================
 
+TestGrid_hasSight_Edges = {}
+    function TestGrid_hasSight_Edges:test_throughIntrinsicWall_surrounginOpen()
+        -- 'wall' edge is only gap between both squares
+        luaunit.assertFalse(g1:hasSight(35,5 , 35,4))   -- dx = 0; '-' slope
+        luaunit.assertFalse(g1:hasSight(34,3 , 35,3))   -- dy = 0
+        
+        -- more than just 1 edge gap
+        luaunit.assertFalse(g1:hasSight(34,3 , 36,3))   -- dy = 0
+        
+    end
+
+--==============================================================================
+
 TestGrid_hasSight_randomAttempts = {}
-
-    function TestGrid_hasSight_randomAttempts:setUp()
-        g1 = Grid:new('tests/Grid/test_1.map')
-    end
-    
-    function TestGrid_hasSight_randomAttempts:tearDown()
-        g1 = nil
-    end
-
     function TestGrid_hasSight_randomAttempts:test_sight_false()
         -- starting point adjacent
         luaunit.assertFalse(g1:hasSight(28,3 , 32,4))   -- '+' slope
@@ -221,6 +190,32 @@ TestGrid_hasSight_randomAttempts = {}
         luaunit.assertTrue(g1:hasSight(28,5 , 33,2))   -- '-' slope
     end
 
+--==============================================================================
+
+TestGrid_hasSight_theta45_throughTwoEdgeCorners = {}
+    function TestGrid_hasSight_theta45_throughTwoEdgeCorners:test_sight_false()
+        luaunit.assertFalse(g1:hasSight(34,4 , 35,5))   -- start adjacent
+        -- start non-adjacent; start inside wall
+        luaunit.assertFalse(g1:hasSight(33,3 , 35,5))
+    end
+        
+
+--==============================================================================
+--[[ [ERROR] - These tests will fail.
+The first and last edge/corner checked will ALWAYS be "blocked" by the unit
+occupying that square.  I.e. the source or target unit will always block it's
+own edges.
+
+TestGrid_hasSight_targetIsUnit = {}
+    function TestGrid_hasSight_targetIsUnit:test_ERROR()
+        luaunit.assertTrue(#,# , #+2,#+2)   -- target is a unit
+    end
+    
+TestGrid_hasSight_sourceIsUnit = {}
+    function TestGrid_hasSight_sourceIsUnit:test_ERROR()
+        luaunit.assertFalse(g1:hasSight(33,3 , 34,4))   -- source is a unit
+    end
+--]]
 --==============================================================================
 --[[    Useful print statements for testing Grid:hasSight()
 

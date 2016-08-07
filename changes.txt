@@ -69,3 +69,13 @@ Version 0.0.3 ------------------------------------------------------------------
         - fully updated to check Edges instead of Cells
         - todo: check actual free-standing wall Edges
           ^ currently all Edges are part of a Cell wall
+0.0.10.0 -----------------------------------------------------------------------
+    - ++ Grid:hasSight()
+        - found more bugs
+        - fixed more bugs
+        - found even more bugs, -_-
+    -> realized major flaw: Units and Tokens will block sight to and from
+       themselves.  A Unit/Token "blocks" all 4 edges of the Cell it's in, thus
+       casting a ray to/from a Unit/Token Cell will *always* be blocked.
+    -> Note: this error ONLY applies to the VERY FIRST edge/corner and VERY LAST
+       edge/corner, as these are the ones occupied by a Unit/Token.
