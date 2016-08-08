@@ -150,6 +150,7 @@ TestGrid_hasSight_bothCorners = {}
 
 TestGrid_hasSight_diagonalThroughBlock = {}
     function TestGrid_hasSight_diagonalThroughBlock:test_throughCorner()
+        luaunit.assertTrue(g2:hasSight(28,2 , 29,3))    -- 45 into 'crate'
         luaunit.assertFalse(g2:hasSight(28,2 , 30,4))   -- '+' slope
         luaunit.assertFalse(g2:hasSight(28,2 , 31,5))   -- '+' slope
         luaunit.assertFalse(g2:hasSight(28,4 , 30,2))   -- '-' slope
