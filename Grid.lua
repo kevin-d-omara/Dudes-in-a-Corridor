@@ -156,13 +156,13 @@ function Grid:pprint(withBuffer)
         s2 = ''
         for i = 1, 2 do
             for x = xStart, xEnd do
-                if self[x][y].blocksMove == true then
+                if self[x][y].blocksSight == true then
                     if i == 1 then
                         s1 = s1..'|XXXXX'
                     else
                         s2 = s2..'|X̲X̲X̲X̲X̲'
                     end
-                elseif self[x][y].blocksMove == false then
+                elseif self[x][y].blocksSight == false then
                     if i == 1 then
                         s1 = s1..'|     '   -- ‖
                     else
