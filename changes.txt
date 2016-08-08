@@ -80,8 +80,13 @@ Version 0.0.3 ------------------------------------------------------------------
     -> Note: this error ONLY applies to the VERY FIRST edge/corner and VERY LAST
        edge/corner, as these are the ones occupied by a Unit/Token.
 0.0.11.0 -----------------------------------------------------------------------
-    - Edge + Cell updated to Raycast version 3 (centered, edges and cells)
+    - Edge + Cell updated to Raycast version 3 (centered w/ edges and cells)
 0.0.12.0 -----------------------------------------------------------------------
     - Grid:new() updated to new version
         - (!) default is 'open' Cells now
         - correctly assigns "type" pointers instead of raw boolean values
+0.0.13.0 -----------------------------------------------------------------------
+    - RAYCASTING IS A GO!!!!!!!!!
+    - Grid:hasSight() fully updated to version 3 (centered w/ edges and cells)
+        - properly accomodates 'wall' Edges & Cells
+          and 'open' Edges with blocked Cells (i.e. 'Unit', 'crate', etc.)

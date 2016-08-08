@@ -1,9 +1,10 @@
 require 'Grid'
 require 'Grid_hasSight'
+require 'tests/Grid/prepare_test_2_map'
 
--- print test_2.map to STDOUT to aid with checking results
 local g2 = Grid:new('tests/Grid/test_2.map')
--- blocked squares ~ crates placed at end
+prepareMap2(g2)
+--g2:pprint() -- print test_2.map to STDOUT to aid with checking results
 
 TestGrid_hasSight_dxIsZero = {}
 
@@ -17,14 +18,14 @@ TestGrid_hasSight_dxIsZero = {}
         luaunit.assertFalse(g2:hasSight(25,5 , 25,3)) -- '-' 'slope'
     end
     
-    function TestGrid_hasSight_dxIsZero:test_endClosed_2wallsDeep()
+    function TestGrid_hasSight_dxIsZero:test_endClosed_2cratesDeep()
         luaunit.assertFalse(g2:hasSight(1,3 , 1,5))   -- '+' 'slope'
         luaunit.assertFalse(g2:hasSight(1,3 , 1,1))   -- '-' 'slope'
     end
     
-    function TestGrid_hasSight_dxIsZero:test_endClosed_1wallDeep()
-        luaunit.assertFalse(g2:hasSight(1,3 , 1,4))    -- '+' 'slope'
-        luaunit.assertFalse(g2:hasSight(1,3 , 1,2))    -- '-' 'slope'
+    function TestGrid_hasSight_dxIsZero:test_endClosed_1crateDeep()
+        luaunit.assertTrue(g2:hasSight(1,3 , 1,4))    -- '+' 'slope'
+        luaunit.assertTrue(g2:hasSight(1,3 , 1,2))    -- '-' 'slope'
     end
     
 --==============================================================================
@@ -41,14 +42,14 @@ TestGrid_hasSight_dyIsZero = {}
         luaunit.assertFalse(g2:hasSight(27,3 , 25,3)) -- aft
     end
     
-    function TestGrid_hasSight_dyIsZero:test_endClosed_2wallsDeep()
+    function TestGrid_hasSight_dyIsZero:test_endClosed_2cratesDeep()
         luaunit.assertFalse(g2:hasSight(21,2 , 23,2)) -- forward
         luaunit.assertFalse(g2:hasSight(5,2 , 3,2))   -- aft
     end
     
-    function TestGrid_hasSight_dyIsZero:test_endClosed_1wallDeep()
-        luaunit.assertFalse(g2:hasSight(21,2 , 22,2))  -- forward
-        luaunit.assertFalse(g2:hasSight(5,2 , 4,2))    -- aft
+    function TestGrid_hasSight_dyIsZero:test_endClosed_1crateDeep()
+        luaunit.assertTrue(g2:hasSight(21,2 , 22,2))  -- forward
+        luaunit.assertTrue(g2:hasSight(5,2 , 4,2))    -- aft
     end
 
 --==============================================================================
@@ -255,96 +256,3 @@ TestGrid_hasSight_sourceIsUnit = {}
     if test then print('('..math.floor(x+eps)..','..(math.floor(y))..')') end
 
 --]]
-
---[[
-Fills the grid with blocked Cells.  This is equivalent to placing a Crate or
-closed Door in each Cell.  Note: the Edges are not transformed to 'wall' type.
---]]
-function test_2_mapBuilder(grid)
-    grid[ 1][5].blocksSight = true
-    grid[ 2][5].blocksSight = true
-    grid[ 3][5].blocksSight = true
-    grid[ 4][5].blocksSight = true
-    grid[ 5][5].blocksSight = true
-    grid[ 6][5].blocksSight = true
-    grid[ 7][5].blocksSight = true
-    grid[ 8][5].blocksSight = true
-    grid[ 9][5].blocksSight = true
-    grid[10][5].blocksSight = true
-    grid[11][5].blocksSight = true
-    grid[12][5].blocksSight = true
-    grid[14][5].blocksSight = true
-    grid[15][5].blocksSight = true
-    grid[16][5].blocksSight = true
-    grid[17][5].blocksSight = true
-    grid[18][5].blocksSight = true
-    grid[19][5].blocksSight = true
-    grid[21][5].blocksSight = true
-    grid[22][5].blocksSight = true
-    grid[23][5].blocksSight = true
-    grid[24][5].blocksSight = true
-    grid[25][5].blocksSight = true
-    grid[26][5].blocksSight = true
-    grid[27][5].blocksSight = true
-    grid[ 1][4].blocksSight = true
-    grid[ 2][4].blocksSight = true
-    grid[ 3][4].blocksSight = true
-    grid[ 4][4].blocksSight = true
-    grid[ 8][4].blocksSight = true
-    grid[18][4].blocksSight = true
-    grid[22][4].blocksSight = true
-    grid[23][4].blocksSight = true
-    grid[24][4].blocksSight = true
-    grid[25][4].blocksSight = true
-    grid[26][4].blocksSight = true
-    grid[27][4].blocksSight = true
-    grid[23][3].blocksSight = true
-    grid[24][3].blocksSight = true
-    grid[25][3].blocksSight = true
-    grid[26][3].blocksSight = true
-    grid[27][3].blocksSight = true
-    grid[ 1][2].blocksSight = true
-    grid[ 2][2].blocksSight = true
-    grid[ 3][2].blocksSight = true
-    grid[ 4][2].blocksSight = true
-    grid[ 8][2].blocksSight = true
-    grid[18][2].blocksSight = true
-    grid[22][2].blocksSight = true
-    grid[23][2].blocksSight = true
-    grid[24][2].blocksSight = true
-    grid[25][2].blocksSight = true
-    grid[26][2].blocksSight = true
-    grid[27][2].blocksSight = true
-    grid[27][2].blocksSight = true
-    grid[ 1][1].blocksSight = true
-    grid[ 2][1].blocksSight = true
-    grid[ 3][1].blocksSight = true
-    grid[ 4][1].blocksSight = true
-    grid[ 5][1].blocksSight = true
-    grid[ 6][1].blocksSight = true
-    grid[ 7][1].blocksSight = true
-    grid[ 8][1].blocksSight = true
-    grid[ 9][1].blocksSight = true
-    grid[10][1].blocksSight = true
-    grid[11][1].blocksSight = true
-    grid[12][1].blocksSight = true
-    grid[14][1].blocksSight = true
-    grid[15][1].blocksSight = true
-    grid[16][1].blocksSight = true
-    grid[17][1].blocksSight = true
-    grid[18][1].blocksSight = true
-    grid[19][1].blocksSight = true
-    grid[21][1].blocksSight = true
-    grid[22][1].blocksSight = true
-    grid[23][1].blocksSight = true
-    grid[24][1].blocksSight = true
-    grid[25][1].blocksSight = true
-    grid[26][1].blocksSight = true
-    grid[27][1].blocksSight = true
-    grid[29][3].blocksSight = true
-    grid[33][3].blocksSight = true
-    grid[31][2].blocksSight = true
-    grid[30][1].blocksSight = true
-    grid[32][1].blocksSight = true
-end
-test_2_mapBuilder(g2); g2:pprint()   -- print test_1.map
