@@ -48,14 +48,14 @@ function Grid:new(filename)
     grid.edgeX = {}
     for xx = (1 - self.BUFFER), (grid.lenX + self.BUFFER + 1) do
         grid.edgeX[xx] = {}
-        for yy = (1 - self.BUFFER), (grid.lenY + self.BUFFER + 1) do
+        for yy = (1 - self.BUFFER), (grid.lenY + self.BUFFER) do
             grid.edgeX[xx][yy] = Edge:new{type = 'wall'}
         end
     end
 
     -- create 2d array with 'wall' Edges along the Y-axis ( __ __ __ )
     grid.edgeY = {}
-    for xx = (1 - self.BUFFER), (grid.lenX + self.BUFFER + 1) do
+    for xx = (1 - self.BUFFER), (grid.lenX + self.BUFFER) do
         grid.edgeY[xx] = {}
         for yy = (1 - self.BUFFER), (grid.lenY + self.BUFFER + 1) do
             grid.edgeY[xx][yy] = Edge:new{type = 'wall'}
@@ -69,11 +69,11 @@ function Grid:new(filename)
         end
     end
     for xx = 2, grid.lenX do    -- edgeX
-        for yy = 2, grid.lenX do
+        for yy = 1, grid.lenX do
             grid.edgeX[xx][yy] = Edge:new{type = 'open'}
         end
     end
-    for xx = 2, grid.lenX do    -- edgeY
+    for xx = 1, grid.lenX do    -- edgeY
         for yy = 2, grid.lenY do
             grid.edgeY[xx][yy] = Edge:new{type = 'open'}
         end
@@ -113,20 +113,20 @@ function Grid:new(filename)
         ii = ii + 1
     end
 
-    -- update Edges and Cells to account for changed types & added entities
-    for xx = (1 - self.BUFFER), (grid.lenX + self.BUFFER + 1) do
-        for yy = (1 - self.BUFFER), (grid.lenY + self.BUFFER + 1) do
-            grid.edgeX[xx][yy]:updateBooleans()
-        end
-    end
-    for xx = (1 - self.BUFFER), (grid.lenX + self.BUFFER + 1) do
-        for yy = (1 - self.BUFFER), (grid.lenY + self.BUFFER + 1) do
-            grid.edgeY[xx][yy]:updateBooleans()
-        end
-    end
+    -- update Cells and Edges to account for changed types & added entities
     for xx = (1 - self.BUFFER), (grid.lenX + self.BUFFER) do
         for yy = (1 - self.BUFFER), (grid.lenY + self.BUFFER) do
             grid[xx][yy]:updateBooleans()
+        end
+    end
+    for xx = (1 - self.BUFFER), (grid.lenX + self.BUFFER + 1) do
+        for yy = (1 - self.BUFFER), (grid.lenY + self.BUFFER) do
+            grid.edgeX[xx][yy]:updateBooleans()
+        end
+    end
+    for xx = (1 - self.BUFFER), (grid.lenX + self.BUFFER) do
+        for yy = (1 - self.BUFFER), (grid.lenY + self.BUFFER + 1) do
+            grid.edgeY[xx][yy]:updateBooleans()
         end
     end
     
