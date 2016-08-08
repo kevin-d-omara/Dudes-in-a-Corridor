@@ -8,27 +8,23 @@ g1:pprint()   -- print test_1.map
 TestGrid_hasSight_dxIsZero = {}
 
     function TestGrid_hasSight_dxIsZero:test_allOpen()
-        local grid = Grid:new('tests/Grid/test_1.map')
-        luaunit.assertTrue(grid:hasSight(13,3 , 13,5))  -- '+' 'slope'
-        luaunit.assertTrue(grid:hasSight(13,5 , 13,3))  -- '-' 'slope'
+        luaunit.assertTrue(g1:hasSight(13,3 , 13,5))  -- '+' 'slope'
+        luaunit.assertTrue(g1:hasSight(13,5 , 13,3))  -- '-' 'slope'
     end
     
     function TestGrid_hasSight_dxIsZero:test_allClosed()
-        local grid = Grid:new('tests/Grid/test_1.map')
-        luaunit.assertFalse(grid:hasSight(25,3 , 25,5)) -- '+' 'slope'
-        luaunit.assertFalse(grid:hasSight(25,5 , 25,3)) -- '-' 'slope'
+        luaunit.assertFalse(g1:hasSight(25,3 , 25,5)) -- '+' 'slope'
+        luaunit.assertFalse(g1:hasSight(25,5 , 25,3)) -- '-' 'slope'
     end
     
     function TestGrid_hasSight_dxIsZero:test_endClosed_2wallsDeep()
-        local grid = Grid:new('tests/Grid/test_1.map')
-        luaunit.assertFalse(grid:hasSight(1,3 , 1,5))   -- '+' 'slope'
-        luaunit.assertFalse(grid:hasSight(1,3 , 1,1))   -- '-' 'slope'
+        luaunit.assertFalse(g1:hasSight(1,3 , 1,5))   -- '+' 'slope'
+        luaunit.assertFalse(g1:hasSight(1,3 , 1,1))   -- '-' 'slope'
     end
     
     function TestGrid_hasSight_dxIsZero:test_endClosed_1wallDeep()
-        local grid = Grid:new('tests/Grid/test_1.map')
-        luaunit.assertFalse(grid:hasSight(1,3 , 1,4))    -- '+' 'slope'
-        luaunit.assertFalse(grid:hasSight(1,3 , 1,2))    -- '-' 'slope'
+        luaunit.assertFalse(g1:hasSight(1,3 , 1,4))    -- '+' 'slope'
+        luaunit.assertFalse(g1:hasSight(1,3 , 1,2))    -- '-' 'slope'
     end
     
 --==============================================================================
@@ -36,27 +32,23 @@ TestGrid_hasSight_dxIsZero = {}
 TestGrid_hasSight_dyIsZero = {}
 
     function TestGrid_hasSight_dyIsZero:test_allOpen()
-        local grid = Grid:new('tests/Grid/test_1.map')
-        luaunit.assertTrue(grid:hasSight(13,3 , 15,3))  -- forward (right)(east)
-        luaunit.assertTrue(grid:hasSight(15,3 , 13,3))  -- aft     (left) (west)
+        luaunit.assertTrue(g1:hasSight(13,3 , 15,3))  -- forward (right)(east)
+        luaunit.assertTrue(g1:hasSight(15,3 , 13,3))  -- aft     (left) (west)
     end
     
     function TestGrid_hasSight_dyIsZero:test_allClosed()
-        local grid = Grid:new('tests/Grid/test_1.map')
-        luaunit.assertFalse(grid:hasSight(25,3 , 27,3)) -- forward
-        luaunit.assertFalse(grid:hasSight(27,3 , 25,3)) -- aft
+        luaunit.assertFalse(g1:hasSight(25,3 , 27,3)) -- forward
+        luaunit.assertFalse(g1:hasSight(27,3 , 25,3)) -- aft
     end
     
     function TestGrid_hasSight_dyIsZero:test_endClosed_2wallsDeep()
-        local grid = Grid:new('tests/Grid/test_1.map')
-        luaunit.assertFalse(grid:hasSight(21,2 , 23,2)) -- forward
-        luaunit.assertFalse(grid:hasSight(5,2 , 3,2))   -- aft
+        luaunit.assertFalse(g1:hasSight(21,2 , 23,2)) -- forward
+        luaunit.assertFalse(g1:hasSight(5,2 , 3,2))   -- aft
     end
     
     function TestGrid_hasSight_dyIsZero:test_endClosed_1wallDeep()
-        local grid = Grid:new('tests/Grid/test_1.map')
-        luaunit.assertFalse(grid:hasSight(21,2 , 22,2))  -- forward
-        luaunit.assertFalse(grid:hasSight(5,2 , 4,2))    -- aft
+        luaunit.assertFalse(g1:hasSight(21,2 , 22,2))  -- forward
+        luaunit.assertFalse(g1:hasSight(5,2 , 4,2))    -- aft
     end
 
 --==============================================================================
