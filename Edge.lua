@@ -2,46 +2,38 @@
 Class - Edge
 Description:
     An Edge is the line segment between two orthogonal Cell faces.  It is a
-    container for game elements such as a Door or Breach.  It's ray blocking
-    properties are defined by both its intrinsic values and the two Cell faces
-    perpendicular to it.
+    container for game entities such as a Door or Breach.
 Hierarchy:
     Ancestors: none
     Children:  none
 Arguments:
-    - Cell :: cell_1, cell_2; the two orthogonal Cells sharing this Edge
-                            ; note: for 'Grid.edgeX' this is left + right
-                            ;       for 'Grid.edgeY' this is top  + bottom
-    - table {} :: args; optional arguments (blocksMove, etc.)
+    - table {} :: args; optional arguments (type, blocksMove, etc.)
 Fields:
+    - table {} :: type
+        {boolean :: blocksMove, blocksSight, blocks}
     - boolean  :: blocksMove, blocksSight, blocksAttack
-    - table {} :: intrinsic {}
-        - boolean :: blocksMove, blocksSight, blocks
 Public API
     - boolean  :: blocksMove, blocksSight, blocksAttack
 --]]
 
 Edge = {}
-function Edge:new(cell_1, cell_2, args)
+
+Edge.types =
+{
+    wall = {blocksMove=true , blocksSight=true , blocksAttack=true},
+    open = {blocksMove=false, blocksSight=false, blocksAttack=false}
+}
+
+function Edge:new(args)
     local edge = {}
     
-    -- default Edge is 'open' with no contained elements
+    -- default Edge is a 'open' with no entities
     if args == nil then args = {} end
-    edge.intrinsic = {}
-    edge.intrinsic.blocksMove = ((args.blocksMove == nil) and {false} or
-        {args.blocksMove})[1]
-    edge.intrinsic.blocksSight = ((args.blocksSight == nil) and {false} or
-        {args.blocksSight})[1]
-    edge.intrinsic.blocksAttack = ((args.blocksAttack == nil) and {false} or
-        {args.blocksAttack})[1]
-
-    edge.cell_1 = cell_1
-    edge.cell_2 = cell_2
-    
-    -- public values defined by 'logical or' of all components
-    edge.blocksMove = false
-    edge.blocksSight = false
-    edge.blocksAttack = false
+    edge.type = ((args.type == nil) and {self.types.open}
+                                     or {self.types[args.type]})[1]
+    edge.blocksMove   = edge.type.blocksMove
+    edge.blocksSight  = edge.type.blocksSight
+    edge.blocksAttack = edge.type.blocksAttack
     
     setmetatable(edge, self)
     self.__index = self
@@ -57,11 +49,19 @@ end
 --]]
 function Edge:updateBooleans()
     -- Each public value is the 'logical or' of all its component values
-    -- If any component blocks, then the public value is 'true'
-    self.blocksMove = self.intrinsic.blocksMove   or self.cell_1.blocksMove
-                                                  or self.cell_2.blocksMove
-    self.blocksSight = self.intrinsic.blocksMove  or self.cell_1.blocksSight
-                                                  or self.cell_2.blocksSight
-    self.blocksAttack = self.intrinsic.blocksMove or self.cell_1.blocksAttack
-                                                  or self.cell_2.blocksAttack
+    self.blocksMove   = self.type.blocksMove -- or entity.blocksMove or ...
+    self.blocksSight  = self.type.blocksSight
+    self.blocksAttack = self.type.blocksAttack
 end
+
+
+
+
+
+
+
+
+
+
+
+

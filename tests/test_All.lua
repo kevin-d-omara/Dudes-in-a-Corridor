@@ -9,7 +9,9 @@ luaunit = require('/tests/luaunit')
 require '/tests/Cell/test_instantiation'
 require '/tests/Edge/test_instantiation'
 require '/tests/Grid/test_instantiation'
+require '/tests/Grid/test_instantiation_2'
 require '/tests/Grid/test_hasSight'
+require '/tests/Grid/test_hasSight_2'
 
 -- begin tests
 lu = luaunit.LuaUnit.new()

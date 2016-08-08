@@ -2,30 +2,37 @@
 Class - Cell
 Description:
     A Cell represents a single square on the game board.  It is a container for
-    all game elements which are "placed on" and "moved around" the board.
+    all game entities which are "placed on" and "moved around" the board.
 Hierarchy:
     Ancestors: none
     Children:  none
 Arguments:
-    - table {} :: args; optional arguments (blocksMove, etc.)
+    - table {} :: args; optional arguments (type, blocksMove, etc.)
 Fields:
+    - table {} :: type
+        {boolean :: blocksMove, blocksSight, blocks}
     - boolean  :: blocksMove, blocksSight, blocksAttack
-    - table {} :: intrinsic
-        - boolean :: blocksMove, blocksSight, blocks
-      TODO need duplicate fields for square itself (i.e. wall vs token)
 Public API
     - boolean  :: blocksMove, blocksSight, blocksAttack
 --]]
 
 Cell = {}
+
+Cell.types =
+{
+    wall = {blocksMove=true , blocksSight=true , blocksAttack=true},
+    open = {blocksMove=false, blocksSight=false, blocksAttack=false}
+}
+
 function Cell:new(args)
     local cell = {}
     
-    -- default Cell is a 'wall' with no contained elements
+    -- default Cell is a 'wall' with no entities
     if args == nil then args = {} end
-    cell.blocksMove = (args.blocksMove == nil) and true or args.blocksMove
-    cell.blocksSight = (args.blocksSight == nil) and true or args.blocksSight
-    cell.blocksAttack = (args.blocksAttack == nil) and true or args.blocksAttack
+    cell.type = (args.type == nil) and self.types.wall or self.types[args.type]
+    cell.blocksMove   = cell.type.blocksMove
+    cell.blocksSight  = cell.type.blocksSight
+    cell.blocksAttack = cell.type.blocksAttack
     
     setmetatable(cell, self)
     self.__index = self
@@ -46,4 +53,7 @@ function Cell:updateBooleans()
         -- composition > inheritance, i.e. 'quackable', 'flyable', etc.
     -- TODO: implement + test
     -- Update Edges when self updated (!)
+    self.blocksMove   = self.type.blocksMove -- or entity.blocksMove or ...
+    self.blocksSight  = self.type.blocksSight
+    self.blocksAttack = self.type.blocksAttack
 end

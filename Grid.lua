@@ -34,34 +34,53 @@ function Grid:new(filename)
     grid.lenX, grid.lenY = lines[2]:match("(%d+),(%d+)")
     grid.lenX = tonumber(grid.lenX)
     grid.lenY = tonumber(grid.lenY)
-    
-    -- create 2d array with default 'wall' Cells
-    for ii = (1 - self.BUFFER), (grid.lenX + self.BUFFER) do
-        grid[ii] = {}
-        for jj = (1 - self.BUFFER), (grid.lenY + self.BUFFER) do
-            grid[ii][jj] = Cell:new{}
+
+    -- create 2d array with 'walls' Cells
+    for xx = (1 - self.BUFFER), (grid.lenX + self.BUFFER) do
+        grid[xx] = {}
+        for yy = (1 - self.BUFFER), (grid.lenY + self.BUFFER) do
+            grid[xx][yy] = Cell:new{type = 'wall'}
+            --
         end
     end
 
-    -- create 2d array with default 'open' Edges along the X-axis ( | | | )
+    -- create 2d array with 'wall' Edges along the X-axis ( | | | )
     grid.edgeX = {}
-    for xx = (2 - self.BUFFER), (grid.lenX + self.BUFFER) do
+    for xx = (1 - self.BUFFER), (grid.lenX + self.BUFFER + 1) do
         grid.edgeX[xx] = {}
-        for yy = (2 - self.BUFFER), (grid.lenY + self.BUFFER - 1) do
-            grid.edgeX[xx][yy] = Edge:new(grid[xx-1][yy], grid[xx][yy])
+        for yy = (1 - self.BUFFER), (grid.lenY + self.BUFFER) do
+            grid.edgeX[xx][yy] = Edge:new{type = 'wall'}
         end
     end
 
-    -- create 2d array with default 'open' Edges along the Y-axis ( __ __ __ )
+    -- create 2d array with 'wall' Edges along the Y-axis ( __ __ __ )
     grid.edgeY = {}
-    for xx = (2 - self.BUFFER), (grid.lenX + self.BUFFER - 1) do
+    for xx = (1 - self.BUFFER), (grid.lenX + self.BUFFER) do
         grid.edgeY[xx] = {}
-        for yy = (2 - self.BUFFER), (grid.lenY + self.BUFFER) do
-            grid.edgeY[xx][yy] = Edge:new(grid[xx][yy], grid[xx][yy-1])
+        for yy = (1 - self.BUFFER), (grid.lenY + self.BUFFER + 1) do
+            grid.edgeY[xx][yy] = Edge:new{type = 'wall'}
+        end
+    end
+    
+    -- carve out 'open' map area, leave boarder of 'wall' Cells & Edges (buffer)
+    for xx = 1, grid.lenX do    -- Cells
+        for yy = 1, grid.lenY do
+            grid[xx][yy] = Cell:new{type = 'open'}
+        end
+    end
+    for xx = 2, grid.lenX do    -- edgeX
+        for yy = 1, grid.lenX do
+            grid.edgeX[xx][yy] = Edge:new{type = 'open'}
+        end
+    end
+    for xx = 1, grid.lenX do    -- edgeY
+        for yy = 2, grid.lenY do
+            grid.edgeY[xx][yy] = Edge:new{type = 'open'}
         end
     end
 
     -- read through file and insert entities into each square
+    -- Note: default state is 'open' Cells & Edges within map dimensions
     local entity = ''
     local ii = 3
     while ii <= #lines do
@@ -75,18 +94,16 @@ function Grid:new(filename)
         local x, y = lines[ii]:match("(%d+),(%d+)")
         x = tonumber(x); y = tonumber(y)
         
-        if entity == 'OpenSquares' then -- set square to 'open' values
-            grid[x][y].blocksMove   = false
-            grid[x][y].blocksSight  = false
-            grid[x][y].blocksAttack = false
-        elseif entity == 'EdgeX' then   -- set edge to 'wall' values
-            grid.edgeX[x][y].intrinsic.blocksMove   = true
-            grid.edgeX[x][y].intrinsic.blocksSight  = true
-            grid.edgeX[x][y].intrinsic.blocksAttack = true
-        elseif entity == 'EdgeY' then
-            grid.edgeY[x][y].intrinsic.blocksMove   = true
-            grid.edgeY[x][y].intrinsic.blocksSight  = true
-            grid.edgeY[x][y].intrinsic.blocksAttack = true
+        if entity == 'WallSquares' then -- set Cell & 4 Edges to 'wall'
+            grid[x][y].type = Cell.types.wall
+            grid.edgeX[x]  [y].type = Edge.types.wall
+            grid.edgeX[x+1][y].type = Edge.types.wall
+            grid.edgeY[x][  y].type = Edge.types.wall
+            grid.edgeY[x][y+1].type = Edge.types.wall
+        elseif entity == 'EdgeX' then   -- set X Edge to 'wall' values
+            grid.edgeX[x][y].type = Edge.types.wall
+        elseif entity == 'EdgeY' then   -- set Y Edge to 'wall' values
+            grid.edgeY[x][y].type = Edge.types.wall
         else -- insert element (rubble, etc.)
             --ii = ii + 1
             --local type = lines[ii]
@@ -96,22 +113,29 @@ function Grid:new(filename)
         ii = ii + 1
     end
 
-    ---[[ updated Edge booleans to account for added entities
-    for xx = (2 - self.BUFFER), (grid.lenX + self.BUFFER) do
-        for yy = (2 - self.BUFFER), (grid.lenY + self.BUFFER - 1) do
+    -- update Cells and Edges to account for changed types & added entities
+    for xx = (1 - self.BUFFER), (grid.lenX + self.BUFFER) do
+        for yy = (1 - self.BUFFER), (grid.lenY + self.BUFFER) do
+            grid[xx][yy]:updateBooleans()
+        end
+    end
+    for xx = (1 - self.BUFFER), (grid.lenX + self.BUFFER + 1) do
+        for yy = (1 - self.BUFFER), (grid.lenY + self.BUFFER) do
             grid.edgeX[xx][yy]:updateBooleans()
         end
     end
-    for xx = (2 - self.BUFFER), (grid.lenX + self.BUFFER - 1) do
-        for yy = (2 - self.BUFFER), (grid.lenY + self.BUFFER) do
+    for xx = (1 - self.BUFFER), (grid.lenX + self.BUFFER) do
+        for yy = (1 - self.BUFFER), (grid.lenY + self.BUFFER + 1) do
             grid.edgeY[xx][yy]:updateBooleans()
         end
     end
-    --]]
     
     setmetatable(grid, self)
     self.__index = self
     --table.insert(Grid.allGrids, grid)
+    
+    -- TODO: UPDATE EVERYTHING
+    
     return grid
 end
 
@@ -132,13 +156,13 @@ function Grid:pprint(withBuffer)
         s2 = ''
         for i = 1, 2 do
             for x = xStart, xEnd do
-                if self[x][y].blocksMove == true then
+                if self[x][y].blocksSight == true then
                     if i == 1 then
                         s1 = s1..'|XXXXX'
                     else
                         s2 = s2..'|X̲X̲X̲X̲X̲'
                     end
-                elseif self[x][y].blocksMove == false then
+                elseif self[x][y].blocksSight == false then
                     if i == 1 then
                         s1 = s1..'|     '   -- ‖
                     else
