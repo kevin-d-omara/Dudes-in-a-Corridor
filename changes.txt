@@ -79,3 +79,5 @@ Version 0.0.3 ------------------------------------------------------------------
        casting a ray to/from a Unit/Token Cell will *always* be blocked.
     -> Note: this error ONLY applies to the VERY FIRST edge/corner and VERY LAST
        edge/corner, as these are the ones occupied by a Unit/Token.
+0.0.11.0 -----------------------------------------------------------------------
+    - Edge + Cell updated to Raycast version 3 (centered, edges and cells)
