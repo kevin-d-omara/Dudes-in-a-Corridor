@@ -27,8 +27,8 @@ TestGrid_hasSight_dxIsZero = {}
     
     function TestGrid_hasSight_dxIsZero:test_endClosed_1wallDeep()
         local grid = Grid:new('tests/Grid/test_1.map')
-        luaunit.assertTrue(grid:hasSight(1,3 , 1,4))    -- '+' 'slope' [ERROR] -> wall blocking itself equivalent to target/source unit blocking own edges.  However, it is desired behavior for a WALL to block itself, but not for units/crates/etc.
-        luaunit.assertTrue(grid:hasSight(1,3 , 1,2))    -- '-' 'slope'
+        luaunit.assertFalse(grid:hasSight(1,3 , 1,4))    -- '+' 'slope'
+        luaunit.assertFalse(grid:hasSight(1,3 , 1,2))    -- '-' 'slope'
     end
     
 --==============================================================================
@@ -55,8 +55,8 @@ TestGrid_hasSight_dyIsZero = {}
     
     function TestGrid_hasSight_dyIsZero:test_endClosed_1wallDeep()
         local grid = Grid:new('tests/Grid/test_1.map')
-        luaunit.assertTrue(grid:hasSight(21,2 , 22,2))  -- forward [ERROR] -> wall blocking itself equivalent to target/source unit blocking own edges.  However, it is desired behavior for a WALL to block itself, but not for units/crates/etc.
-        luaunit.assertTrue(grid:hasSight(5,2 , 4,2))    -- aft
+        luaunit.assertFalse(grid:hasSight(21,2 , 22,2))  -- forward
+        luaunit.assertFalse(grid:hasSight(5,2 , 4,2))    -- aft
     end
 
 --==============================================================================

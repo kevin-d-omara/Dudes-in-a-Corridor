@@ -81,3 +81,7 @@ Version 0.0.3 ------------------------------------------------------------------
        edge/corner, as these are the ones occupied by a Unit/Token.
 0.0.11.0 -----------------------------------------------------------------------
     - Edge + Cell updated to Raycast version 3 (centered, edges and cells)
+0.0.12.0 -----------------------------------------------------------------------
+    - Grid:new() updated to new version
+        - (!) default is 'open' Cells now
+        - correctly assigns "type" pointers instead of raw boolean values

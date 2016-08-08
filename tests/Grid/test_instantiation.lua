@@ -16,9 +16,9 @@ TestGrid_Instantiation = {}
         for xx = 1, grid.lenX do
             for yy = 1, grid.lenY do
                 luaunit.assertEquals(getmetatable(grid[xx][yy]), Cell)
-                luaunit.assertEquals(grid[xx][yy].blocksMove, true)
-                luaunit.assertEquals(grid[xx][yy].blocksSight, true)
-                luaunit.assertEquals(grid[xx][yy].blocksAttack, true)  
+                luaunit.assertFalse(grid[xx][yy].blocksMove)
+                luaunit.assertFalse(grid[xx][yy].blocksSight)
+                luaunit.assertFalse(grid[xx][yy].blocksAttack)
             end
         end
     end
@@ -39,33 +39,17 @@ TestGrid_Instantiation = {}
 --==============================================================================
 
 TestGrid_Instantiation_Edges = {}
-    function TestGrid_Instantiation_Edges:test_public()
-        -- public 'open' edges
+    function TestGrid_Instantiation_Edges:test_trueFalse()
+        -- 'open' edges (default)
         luaunit.assertFalse(g1.edgeX[11][3].blocksMove)
         luaunit.assertFalse(g1.edgeY[11][3].blocksMove)
         
-        -- public 'wall' edges
+        -- 'wall' edges (set by Cells)
         luaunit.assertTrue(g1.edgeX[3][4].blocksMove)
         luaunit.assertTrue(g1.edgeY[4][3].blocksMove)
-    end
-
-    function TestGrid_Instantiation_Edges:test_intrinsicOpen_publicWall()
-        -- intrinsic 'open' Edge
-        luaunit.assertFalse(g1.edgeX[5][4].intrinsic.blocksMove)
-        luaunit.assertFalse(g1.edgeY[5][5].intrinsic.blocksMove)
         
-        -- public 'wall' Edge (from intrinsic 'open')
-        luaunit.assertTrue(g1.edgeX[5][4].blocksMove)
-        luaunit.assertTrue(g1.edgeY[5][5].blocksMove)
-    end
-
-    function TestGrid_Instantiation_Edges:test_intrinsicWall_surroundingOpen()
-        -- intrinsic 'wall' Edge
-        luaunit.assertTrue(g1.edgeX[35][3].intrinsic.blocksMove)
-        luaunit.assertTrue(g1.edgeY[35][5].intrinsic.blocksMove)
-        
-        -- public 'wall' Edge (from intrinsic 'wall')
+        -- 'wall' edges (set by EdgeX & EdgeY)
         luaunit.assertTrue(g1.edgeX[35][3].blocksMove)
+        luaunit.assertTrue(g1.edgeX[35][5].blocksMove)
         luaunit.assertTrue(g1.edgeY[35][5].blocksMove)
     end
-
