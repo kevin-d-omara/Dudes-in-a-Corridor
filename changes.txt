@@ -90,3 +90,8 @@ Version 0.0.3 ------------------------------------------------------------------
     - Grid:hasSight() fully updated to version 3 (centered w/ edges and cells)
         - properly accomodates 'wall' Edges & Cells
           and 'open' Edges with blocked Cells (i.e. 'Unit', 'crate', etc.)
+0.0.14.0 -----------------------------------------------------------------------
+    - implemented basic window & settings system through:
+        - 'conf.lua'       (immutable settings)
+        - 'settings.lua'   (mutable settings)
+        - 'initialize.lua' (applies 'settings.lua')
