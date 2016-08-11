@@ -1,5 +1,5 @@
 function love.load()
-    require "initialize"
+    require "initialize"    -- gets values from 'settings.lua'
 end
 
 function love.update(dt)
