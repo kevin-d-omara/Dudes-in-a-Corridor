@@ -7,7 +7,7 @@ Hierarchy:
     Ancestors: none
     Children:  none
 Arguments:
-    - table {} :: args; optional arguments (type, blocksMove, etc.)
+    - table {} :: args; optional arguments (type, etc.)
 Fields:
     - table {} :: type
         {boolean :: blocksMove, blocksSight, blocks}
