@@ -10,4 +10,4 @@ Dudes-in-a-Corridor/manifesto.txt
 
 This project lays the foundation to bring [the boardgame Sector 8](http://kevinomara.crevado.com/ "Sector 8 artwork: http://kevinomara.crevado.com/") to a computer near you!
 
-![Image](<http://i.imgur.com/ZjGyhUB.png>)
+![Several beautiful board game tiles depicting a World War 2 bunker layed out on a wooden table.](https://cloud.githubusercontent.com/assets/11803661/22157935/a498f6d4-deee-11e6-8ba9-f266d9723244.jpg "Preview")
